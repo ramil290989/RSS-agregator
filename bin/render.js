@@ -15,7 +15,7 @@ const renderErrors = (value, htmlElements) => {
   }
 };
 
-const renderFeeds = (value, previousValue, htmlElements) => {
+const renderFeeds = (value, previousValue, htmlElements, i18nInstance) => {
   const { form, input, feeds } = htmlElements;
   if (!previousValue.length) {
     const feedCard = document.createElement('div');
@@ -24,7 +24,7 @@ const renderFeeds = (value, previousValue, htmlElements) => {
     cardBody.classList.add('card-body');
     const cardTitle = document.createElement('h2');
     cardTitle.classList.add('card-title', 'h4');
-    cardTitle.textContent = 'Фиды';
+    cardTitle.textContent = i18nInstance.t('feedsContainer.feeds');
     cardBody.append(cardTitle);
     feedCard.append(cardBody);
     const feedList = document.createElement('ul');
@@ -46,13 +46,13 @@ const renderFeeds = (value, previousValue, htmlElements) => {
   input.focus();
 };
 
-const render = (state, htmlElements) => (path, value, previousValue) => {
+const render = (state, htmlElements, i18nInstance) => (path, value, previousValue) => {
   switch (path) {
     case 'form.errors':
       renderErrors(value, htmlElements);
       break;
     case 'feeds':
-      renderFeeds(value, previousValue, htmlElements);
+      renderFeeds(value, previousValue, htmlElements, i18nInstance);
       break;
     default:
       break;
