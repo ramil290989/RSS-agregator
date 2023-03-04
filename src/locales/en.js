@@ -4,9 +4,18 @@ export default {
       urlIsInvalid: 'invalid url address',
       sameFeed: 'this feed already exists',
       inputRequired: 'field must not be empty',
+      noRssData: 'link does not contain RSS',
+      ERR_NETWORK: 'Network Error',
+    },
+    feedbackMessage: {
+      rssLoadOk: 'RSS uploaded successfully',
     },
     feedsContainer: {
       feeds: 'Feeds',
+    },
+    postsContainer: {
+      posts: 'Posts',
+      viewButton: 'View',
     },
   },
 };
