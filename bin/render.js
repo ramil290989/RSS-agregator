@@ -47,10 +47,9 @@ const renderCards = (htmlElements, i18nInstance) => {
   posts.append(postsCard);
 };
 
-const renderRss = (value, previousValue, htmlElements, i18nInstance) => {
+const renderFeeds = (value, previousValue, htmlElements, i18nInstance) => {
   const {
     feeds,
-    posts,
     feedbackMessage,
     form,
     input,
@@ -59,40 +58,18 @@ const renderRss = (value, previousValue, htmlElements, i18nInstance) => {
   if (!previousValue.length) {
     renderCards(htmlElements, i18nInstance);
   }
-  const rssData = value.at(-1);
+  const feedData = value.at(0);
   const feedsList = feeds.querySelector('.list-group');
   const feedsItem = document.createElement('li');
   feedsItem.classList.add('list-group-item', 'border-0', 'border-end-0');
   const feedTitle = document.createElement('h3');
   feedTitle.classList.add('h6', 'm-0');
-  feedTitle.textContent = rssData.feed.title;
+  feedTitle.textContent = feedData.title;
   const feedDescription = document.createElement('p');
   feedDescription.classList.add('m-0', 'small', 'text-black-50');
-  feedDescription.textContent = rssData.feed.description;
+  feedDescription.textContent = feedData.description;
   feedsItem.append(feedTitle, feedDescription);
-  feedsList.append(feedsItem);
-  const postsList = posts.querySelector('.list-group');
-  const rssPosts = rssData.posts;
-  rssPosts.forEach((post) => {
-    const postsListItem = document.createElement('li');
-    postsListItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
-    const postLink = document.createElement('a');
-    postLink.classList.add('fw-bold');
-    postLink.setAttribute('href', post.link);
-    postLink.setAttribute('target', '_blank');
-    postLink.setAttribute('rel', 'noopener noreferrer');
-    postLink.dataset.id = '2';
-    postLink.textContent = post.title;
-    const viewButton = document.createElement('button');
-    viewButton.type = 'button';
-    viewButton.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-    viewButton.dataset.id = post.id;
-    viewButton.dataset.bsToggle = 'modal';
-    viewButton.dataset.bsTarget = '#modal';
-    viewButton.textContent = i18nInstance.t('postsContainer.viewButton');
-    postsListItem.append(postLink, viewButton);
-    postsList.append(postsListItem);
-  });
+  feedsList.prepend(feedsItem);
   feedbackMessage.classList.remove('text-danger');
   feedbackMessage.classList.add('text-success');
   feedbackMessage.textContent = i18nInstance.t('feedbackMessage.rssLoadOk');
@@ -100,13 +77,42 @@ const renderRss = (value, previousValue, htmlElements, i18nInstance) => {
   input.focus();
 };
 
+const renderPosts = (postsData, htmlElements, i18nInstance) => {
+  const { posts } = htmlElements;
+  const postsList = posts.querySelector('.list-group');
+  postsList.textContent = '';
+  postsData.forEach((postData) => {
+    const postsListItem = document.createElement('li');
+    postsListItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
+    const postLink = document.createElement('a');
+    postLink.classList.add('fw-bold');
+    postLink.setAttribute('href', postData.link);
+    postLink.setAttribute('target', '_blank');
+    postLink.setAttribute('rel', 'noopener noreferrer');
+    postLink.dataset.id = '2';
+    postLink.textContent = postData.title;
+    const viewButton = document.createElement('button');
+    viewButton.type = 'button';
+    viewButton.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+    viewButton.dataset.id = postData.id;
+    viewButton.dataset.bsToggle = 'modal';
+    viewButton.dataset.bsTarget = '#modal';
+    viewButton.textContent = i18nInstance.t('postsContainer.viewButton');
+    postsListItem.append(postLink, viewButton);
+    postsList.append(postsListItem);
+  });
+};
+
 const render = (state, htmlElements, i18nInstance) => (path, value, previousValue) => {
   switch (path) {
     case 'form.errors':
       renderErrors(value, htmlElements);
       break;
-    case 'rss':
-      renderRss(value, previousValue, htmlElements, i18nInstance);
+    case 'feeds':
+      renderFeeds(value, previousValue, htmlElements, i18nInstance);
+      break;
+    case 'posts':
+      renderPosts(value, htmlElements, i18nInstance);
       break;
     default:
       break;

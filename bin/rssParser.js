@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 const rssParser = (xmlString) => {
   const data = {
     feed: {
@@ -15,12 +13,10 @@ const rssParser = (xmlString) => {
   const items = xmlDoc.querySelectorAll('item');
   items.forEach((item) => {
     const post = {
-      id: '',
       title: '',
       link: '',
       description: '',
     };
-    post.id = _.uniqueId();
     post.title = item.querySelector('title').textContent;
     post.link = item.querySelector('link').textContent;
     post.description = item.querySelector('description').textContent;
