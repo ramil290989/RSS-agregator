@@ -1,13 +1,13 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
-import * as path from 'path';
+import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const config = {
-  mode: 'production',
+  mode: process.env.NODE_ENV || 'development',
   entry: './src/index.js',
   output: {
-    path: path.resolve('dist'),
+    path: path.resolve('.', 'dist'),
   },
   devServer: {
     open: true,
