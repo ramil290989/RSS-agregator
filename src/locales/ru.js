@@ -2,7 +2,7 @@ export default {
   translation: {
     errorMessages: {
       urlIsInvalid: 'неверный URL адрес',
-      sameFeed: 'такой фид уже есть',
+      sameFeed: 'RSS уже существует',
       inputRequired: 'поле не должно быть пустым',
       noRssData: 'ссылка не содержит RSS',
       ERR_NETWORK: 'ошибка сети',
