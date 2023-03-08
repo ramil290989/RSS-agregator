@@ -17,6 +17,7 @@ const init = () => {
     },
     feeds: [],
     posts: [],
+    readPostIds: [],
   };
 
   const i18nInstance = i18n.createInstance();
@@ -48,6 +49,9 @@ const init = () => {
     feedbackMessage: document.querySelector('.feedback'),
     feeds: document.querySelector('.feeds'),
     posts: document.querySelector('.posts'),
+    modalTitle: document.querySelector('.modal-title'),
+    modalBody: document.querySelector('.modal-body'),
+    modalReadButton: document.querySelector('.btn-primary'),
   };
 
   const timeoutInterval = 5000;
@@ -69,10 +73,10 @@ const init = () => {
                   url: inputText,
                 };
                 const posts = rssData.posts.map((post) => ({
-                  id: _.uniqueId(),
                   title: post.title,
                   link: post.link,
                   description: post.description,
+                  id: _.uniqueId('postID_'),
                 }));
                 watchedState.form.errors = '';
                 watchedState.feeds.unshift(feed);
@@ -99,8 +103,9 @@ const init = () => {
           watchedState.form.errors = '';
           const newData = rssParser(response.data.contents);
           const postsTitle = state.posts.map((post) => post.title);
-          const newPosts = newData.posts.filter((newPost) => !postsTitle.includes(newPost.title));
-          console.log(newPosts);
+          const newPosts = newData.posts
+            .filter((newPost) => !postsTitle.includes(newPost.title))
+            .map((newPost) => ({ ...newPost, id: _.uniqueId('postID_') }));
           if (newPosts.length) {
             watchedState.posts = newPosts.concat(state.posts);
           }
@@ -119,6 +124,14 @@ const init = () => {
     const formData = new FormData(e.target);
     const inputUrl = formData.get('url');
     validateInputUrl(inputUrl);
+  });
+
+  htmlElements.posts.addEventListener('click', ({ target }) => {
+    const postId = target.dataset.id;
+    if (postId !== undefined) {
+      watchedState.readPostIds = _.union([postId], state.readPostIds);
+    }
+    console.log(state.readPostIds);
   });
 };
 

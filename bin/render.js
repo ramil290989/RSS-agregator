@@ -77,7 +77,7 @@ const renderFeeds = (value, previousValue, htmlElements, i18nInstance) => {
   input.focus();
 };
 
-const renderPosts = (postsData, htmlElements, i18nInstance) => {
+const renderPosts = (postsData, htmlElements, state, i18nInstance) => {
   const { posts } = htmlElements;
   const postsList = posts.querySelector('.list-group');
   postsList.textContent = '';
@@ -103,6 +103,24 @@ const renderPosts = (postsData, htmlElements, i18nInstance) => {
   });
 };
 
+const renderModal = (state, value, htmlElements) => {
+  const {
+    posts,
+    modalTitle,
+    modalBody,
+    modalReadButton,
+  } = htmlElements;
+  const postId = value.at(0);
+  const postData = state.posts.filter((post) => post.id === postId).at(0);
+  modalTitle.textContent = postData.title;
+  modalBody.textContent = postData.description;
+  modalReadButton.href = postData.link;
+  const post = posts.querySelector(`a[href="${postData.link}"]`);
+  post.classList.add('fw-normal');
+  post.classList.remove('fw-bold');
+  console.log(post);
+};
+
 const render = (state, htmlElements, i18nInstance) => (path, value, previousValue) => {
   switch (path) {
     case 'form.errors':
@@ -112,7 +130,10 @@ const render = (state, htmlElements, i18nInstance) => (path, value, previousValu
       renderFeeds(value, previousValue, htmlElements, i18nInstance);
       break;
     case 'posts':
-      renderPosts(value, htmlElements, i18nInstance);
+      renderPosts(value, htmlElements, state, i18nInstance);
+      break;
+    case 'readPostIds':
+      renderModal(state, value, htmlElements);
       break;
     default:
       break;

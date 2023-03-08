@@ -6,6 +6,7 @@ export default {
       inputRequired: 'поле не должно быть пустым',
       noRssData: 'ссылка не содержит RSS',
       ERR_NETWORK: 'ошибка сети',
+      undefined: 'неизвестная ошибка',
     },
     feedbackMessage: {
       rssLoadOk: 'RSS успешно загружен',
