@@ -1,18 +1,13 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
-import path from 'path';
+import * as path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const isProduction = process.env.NODE_ENV === 'production';
 
 const config = {
+  mode: 'production',
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve('webpack_assembly'),
   },
   devServer: {
     open: true,
@@ -47,11 +42,5 @@ const config = {
     ],
   },
 };
-
-if (isProduction) {
-  config.mode = 'production';
-} else {
-  config.mode = 'development';
-}
 
 export default config;
