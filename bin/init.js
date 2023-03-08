@@ -37,12 +37,6 @@ const init = () => {
     },
   });
 
-  const validateSchema = yup
-    .string()
-    .url()
-    .notOneOf(state.feeds.map((feed) => feed.url))
-    .required();
-
   const htmlElements = {
     form: document.querySelector('.rss-form'),
     input: document.querySelector('#url-input'),
@@ -59,6 +53,11 @@ const init = () => {
   const watchedState = onChange(state, render(state, htmlElements, i18nInstance));
 
   const validateInputUrl = (inputText) => {
+    const validateSchema = yup
+      .string()
+      .url()
+      .notOneOf(state.feeds.map((feed) => feed.url))
+      .required();
     validateSchema.validate(inputText)
       .then((inputUrl) => {
         const url = getAllOriginsUrl(inputUrl);
@@ -131,7 +130,6 @@ const init = () => {
     if (postId !== undefined) {
       watchedState.readPostIds = _.union([postId], state.readPostIds);
     }
-    console.log(state.readPostIds);
   });
 };
 
