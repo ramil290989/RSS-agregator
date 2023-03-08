@@ -7,7 +7,7 @@ const config = {
   mode: 'production',
   entry: './src/index.js',
   output: {
-    path: path.resolve('webpack_assembly'),
+    path: path.resolve('dist'),
   },
   devServer: {
     open: true,
