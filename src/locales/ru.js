@@ -1,11 +1,11 @@
 export default {
   translation: {
     errorMessages: {
-      urlIsInvalid: 'неверный URL адрес',
+      urlIsInvalid: 'Ссылка должна быть валидным URL',
       sameFeed: 'RSS уже существует',
-      inputRequired: 'поле не должно быть пустым',
-      noRssData: 'ресурс не содержит RSS',
-      ERR_NETWORK: 'ошибка сети',
+      inputRequired: 'Не должно быть пустым',
+      noRssData: 'Ресурс не содержит валидный RSS',
+      ERR_NETWORK: 'Ошибка сети',
       undefined: 'неизвестная ошибка',
     },
     feedbackMessage: {
