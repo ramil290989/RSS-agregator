@@ -85,7 +85,10 @@ const renderPosts = (postsData, htmlElements, state, i18nInstance) => {
     const postsListItem = document.createElement('li');
     postsListItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
     const postLink = document.createElement('a');
-    postLink.classList.add('fw-bold');
+    const linkClass = state.readPostIds.includes(postData.id)
+      ? 'fw-normal'
+      : 'fw-bold';
+    postLink.classList.add(linkClass);
     postLink.setAttribute('href', postData.link);
     postLink.setAttribute('target', '_blank');
     postLink.setAttribute('rel', 'noopener noreferrer');
@@ -118,7 +121,6 @@ const renderModal = (state, value, htmlElements) => {
   const post = posts.querySelector(`a[href="${postData.link}"]`);
   post.classList.add('fw-normal');
   post.classList.remove('fw-bold');
-  console.log(post);
 };
 
 const render = (state, htmlElements, i18nInstance) => (path, value, previousValue) => {

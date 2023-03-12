@@ -1,7 +1,13 @@
 const rssValidate = (xmlString) => {
+  let result;
   const parser = new DOMParser();
   const xmlDoc = parser.parseFromString(xmlString, 'application/xml');
-  return xmlDoc.firstElementChild.tagName === 'rss';
+  if (!xmlDoc.querySelector('parsererror')) {
+    result = xmlDoc.firstElementChild.tagName === 'rss';
+  } else {
+    result = false;
+  }
+  return result;
 };
 
 export default rssValidate;

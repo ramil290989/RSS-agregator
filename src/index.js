@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 import './styles.scss';
 import 'bootstrap';
-import init from '../bin/init.js';
-
-console.log('Hello Ramil!');
+import init from './init.js';
 
 init();
