@@ -1,20 +1,6 @@
 const renderErrors = (value, htmlElements) => {
-  const { feedbackMessage, input } = htmlElements;
-  const addError = (error) => {
-    feedbackMessage.classList.remove('text-success');
-    feedbackMessage.classList.add('text-danger');
-    feedbackMessage.textContent = error;
-    input.classList.add('is-invalid');
-  };
-  const removeError = () => {
-    feedbackMessage.textContent = '';
-    input.classList.remove('is-invalid');
-  };
-  if (value !== '') {
-    addError(value);
-  } else {
-    removeError();
-  }
+  const { feedbackMessage } = htmlElements;
+  feedbackMessage.textContent = value;
 };
 
 const renderCards = (htmlElements, i18nInstance) => {
@@ -48,12 +34,7 @@ const renderCards = (htmlElements, i18nInstance) => {
 };
 
 const renderFeeds = (value, previousValue, htmlElements, i18nInstance) => {
-  const {
-    feeds,
-    feedbackMessage,
-    form,
-    input,
-  } = htmlElements;
+  const { feeds } = htmlElements;
 
   if (!previousValue.length) {
     renderCards(htmlElements, i18nInstance);
@@ -70,11 +51,6 @@ const renderFeeds = (value, previousValue, htmlElements, i18nInstance) => {
   feedDescription.textContent = feedData.description;
   feedsItem.append(feedTitle, feedDescription);
   feedsList.prepend(feedsItem);
-  feedbackMessage.classList.remove('text-danger');
-  feedbackMessage.classList.add('text-success');
-  feedbackMessage.textContent = i18nInstance.t('feedbackMessage.rssLoadOk');
-  form.reset();
-  input.focus();
 };
 
 const renderPosts = (postsData, htmlElements, state, i18nInstance) => {
@@ -123,9 +99,45 @@ const renderModal = (state, value, htmlElements) => {
   post.classList.remove('fw-bold');
 };
 
+const renderFormElements = (value, htmlElements, i18nInstance) => {
+  const {
+    button,
+    form,
+    input,
+    feedbackMessage,
+  } = htmlElements;
+
+  switch (value) {
+    case 'filling':
+      button.disabled = false;
+      break;
+    case 'waiting':
+      button.disabled = true;
+      input.classList.remove('is-invalid');
+      break;
+    case 'error':
+      button.disabled = false;
+      feedbackMessage.classList.remove('text-success');
+      feedbackMessage.classList.add('text-danger');
+      input.classList.add('is-invalid');
+      break;
+    case 'added':
+      button.disabled = false;
+      feedbackMessage.classList.remove('text-danger');
+      feedbackMessage.classList.add('text-success');
+      feedbackMessage.textContent = i18nInstance.t('feedbackMessage.rssLoadOk');
+      input.classList.remove('is-invalid');
+      form.reset();
+      input.focus();
+      break;
+    default:
+      break;
+  }
+};
+
 const render = (state, htmlElements, i18nInstance) => (path, value, previousValue) => {
   switch (path) {
-    case 'form.errors':
+    case 'errors':
       renderErrors(value, htmlElements);
       break;
     case 'feeds':
@@ -136,6 +148,9 @@ const render = (state, htmlElements, i18nInstance) => (path, value, previousValu
       break;
     case 'readPostIds':
       renderModal(state, value, htmlElements);
+      break;
+    case 'form.process':
+      renderFormElements(value, htmlElements, i18nInstance);
       break;
     default:
       break;

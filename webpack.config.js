@@ -1,9 +1,9 @@
 // Generated using webpack-cli https://github.com/webpack/webpack-cli
 
-import path from 'path';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const config = {
+module.exports = {
   mode: process.env.NODE_ENV || 'development',
   entry: './src/index.js',
   output: {
@@ -42,5 +42,3 @@ const config = {
     ],
   },
 };
-
-export default config;

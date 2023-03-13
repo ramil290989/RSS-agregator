@@ -1,3 +1,19 @@
+const getPosts = (items) => {
+  const posts = [];
+  items.forEach((item) => {
+    const post = {
+      title: '',
+      link: '',
+      description: '',
+    };
+    post.title = item.querySelector('title').textContent;
+    post.link = item.querySelector('link').textContent;
+    post.description = item.querySelector('description').textContent;
+    posts.push(post);
+  });
+  return posts;
+};
+
 const rssParser = (xmlString) => {
   const data = {
     feed: {
@@ -11,17 +27,7 @@ const rssParser = (xmlString) => {
   data.feed.title = xmlDoc.querySelector('title').textContent;
   data.feed.description = xmlDoc.querySelector('description').textContent;
   const items = xmlDoc.querySelectorAll('item');
-  items.forEach((item) => {
-    const post = {
-      title: '',
-      link: '',
-      description: '',
-    };
-    post.title = item.querySelector('title').textContent;
-    post.link = item.querySelector('link').textContent;
-    post.description = item.querySelector('description').textContent;
-    data.posts.push(post);
-  });
+  data.posts = getPosts(items).flat();
   return data;
 };
 
