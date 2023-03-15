@@ -8,18 +8,6 @@ import render from './render.js';
 import rssParser from './rssParser.js';
 import getAllOriginsUrl from './getAllOriginsUrl.js';
 
-const htmlElements = {
-  button: document.querySelector('button[type=submit]'),
-  form: document.querySelector('.rss-form'),
-  input: document.querySelector('#url-input'),
-  feedbackMessage: document.querySelector('.feedback'),
-  feeds: document.querySelector('.feeds'),
-  posts: document.querySelector('.posts'),
-  modalTitle: document.querySelector('.modal-title'),
-  modalBody: document.querySelector('.modal-body'),
-  modalReadButton: document.querySelector('.btn-primary'),
-};
-
 const timeoutInterval = 5000;
 
 const validateInputUrl = (inputText, state) => {
@@ -59,6 +47,18 @@ const init = () => {
         },
       });
 
+      const htmlElements = {
+        button: document.querySelector('button[type=submit]'),
+        form: document.querySelector('.rss-form'),
+        input: document.querySelector('#url-input'),
+        feedbackMessage: document.querySelector('.feedback'),
+        feeds: document.querySelector('.feeds'),
+        posts: document.querySelector('.posts'),
+        modalTitle: document.querySelector('.modal-title'),
+        modalBody: document.querySelector('.modal-body'),
+        modalReadButton: document.querySelector('.btn-primary'),
+      };
+
       const watchedState = onChange(state, render(state, htmlElements, i18nInstance));
 
       const loadRssData = (inputText) => {
@@ -80,6 +80,7 @@ const init = () => {
             watchedState.feeds.unshift(feed);
             watchedState.posts = posts.concat(state.posts);
             watchedState.form.process = 'added';
+            watchedState.form.process = 'filling';
           })
           .catch((error) => {
             watchedState.form.process = 'error';
@@ -87,7 +88,7 @@ const init = () => {
               case 'ValidationError':
                 watchedState.errors = i18nInstance.t(`errorMessages.${error.errors}`);
                 break;
-              case 'TypeError':
+              case 'ParsingError':
                 watchedState.errors = i18nInstance.t('errorMessages.noRssData');
                 break;
               case 'AxiosError':
@@ -110,24 +111,17 @@ const init = () => {
                 .map((newPost) => ({ ...newPost, id: _.uniqueId('postID_') }));
               return newPosts;
             })
-            .catch((error) => {
-              console.log(error);
-              return state.posts;
-            }));
+            .catch(() => null));
         Promise.all(newPostsRequests)
           .then((allNewPosts) => {
-            const newPosts = allNewPosts.flat();
+            const newPosts = allNewPosts
+              .flat()
+              .filter((newPost) => newPost !== null);
             if (newPosts.length) {
               watchedState.posts = newPosts.concat(state.posts);
             }
           })
-          .then(() => {
-            console.log('update');
-            setTimeout(rssUpdate, timeoutInterval);
-          })
-          .catch(() => {
-            setTimeout(rssUpdate, timeoutInterval);
-          });
+          .finally(() => setTimeout(rssUpdate, timeoutInterval));
       };
 
       rssUpdate();
@@ -138,7 +132,6 @@ const init = () => {
         const formData = new FormData(e.target);
         const inputUrl = formData.get('url');
         loadRssData(inputUrl);
-        watchedState.form.process = 'filling';
       });
 
       htmlElements.posts.addEventListener('click', ({ target }) => {

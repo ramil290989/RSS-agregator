@@ -24,6 +24,12 @@ const rssParser = (xmlString) => {
   };
   const parser = new DOMParser();
   const xmlDoc = parser.parseFromString(xmlString, 'application/xml');
+  const parserError = xmlDoc.querySelector('parsererror');
+  if (parserError) {
+    const error = new Error('parsingError');
+    error.name = 'ParsingError';
+    throw error;
+  }
   data.feed.title = xmlDoc.querySelector('title').textContent;
   data.feed.description = xmlDoc.querySelector('description').textContent;
   const items = xmlDoc.querySelectorAll('item');
